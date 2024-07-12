@@ -15,19 +15,21 @@ const passport = require("passport");
 
 const passportLocal = require("./config/passport-local-strategy");
 
-const MongoStore = require("connect-mongo")(session);
-app.use(expressLayouts);
-
-// extract style and scripts from sub pages into the layout
-
-app.set("layout extractStyles", true);
-app.set("layout extractScripts", true);
+// const MongoStore = require("connect-mongo")(session);
+const MongoStore = require("connect-mongo");
 
 app.use(express.urlencoded());
 
 app.use(cookieParser());
 
 app.use(express.static("./assets"));
+
+app.use(expressLayouts);
+
+// extract style and scripts from sub pages into the layout
+
+app.set("layout extractStyles", true);
+app.set("layout extractScripts", true);
 
 // set up the view engine
 
@@ -47,9 +49,10 @@ app.use(
     cookie: {
       maxAge: 1000 * 60 * 100,
     },
-    store: new MongoStore(
+    store: MongoStore.create(
       {
-        mongooseConnection: db,
+        // mongooseConnection: db,
+        mongoUrl: "mongodb://0.0.0.0:27017/codeial_development",
         autoRemove: "disabled",
       },
 
